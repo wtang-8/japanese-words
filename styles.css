@@ -39,9 +39,12 @@ p{color:var(--muted); margin-top:0}
 .toggle-text{font-size:0.95rem; color:var(--text)}
 
 .word-list{list-style:none; padding:0; margin:24px 0; display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:12px}
-.word-item{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:16px; text-align:center; cursor:default; position:relative}
+.word-item{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:16px; text-align:center; cursor:pointer; position:relative; transition:all .2s}
+.word-item:hover{border-color:var(--accent); transform:translateY(-2px)}
+.word-item.active{background:var(--accent); border-color:var(--accent)}
 .word{font-size:1.25rem; font-weight:600}
-.definition{color:var(--muted); font-size:0.95rem}
+.definition{color:var(--muted); font-size:0.95rem; display:none; margin-top:8px}
+.word-item.active .definition{display:block; color:var(--bg)}
 
 .tooltip{position:fixed; z-index:1000; background:var(--tooltip); color:var(--text); border:1px solid var(--border); border-radius:12px; padding:14px 16px; box-shadow:0 20px 40px rgba(0,0,0,0.35); width:min(460px, calc(100vw - 24px)); pointer-events:none; opacity:0; transform:translateY(6px); transition:opacity .12s ease, transform .12s ease}
 .tooltip.visible{opacity:1; transform:translateY(0)}

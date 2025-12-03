@@ -18,9 +18,7 @@
         <div class="definition">${item.definition}</div>
       `;
 
-      li.addEventListener('mouseenter', (e) => showTooltip(e.currentTarget, item));
-      li.addEventListener('mousemove', positionTooltip);
-      li.addEventListener('mouseleave', hideTooltip);
+      li.addEventListener('click', (e) => toggleWordReveal(e.currentTarget, item));
 
       li.dataset.wordData = JSON.stringify(item);
       list.appendChild(li);
@@ -61,6 +59,27 @@
   searchInput.addEventListener('input', applyFilters);
   onomatopeToggle.addEventListener('change', applyFilters);
 
+  let activeElement = null;
+
+  function toggleWordReveal(target, item){
+    // Close previously active card
+    if (activeElement && activeElement !== target) {
+      activeElement.classList.remove('active');
+      hideTooltip();
+    }
+
+    // Toggle current card
+    const isActive = target.classList.toggle('active');
+    
+    if (isActive) {
+      activeElement = target;
+      showTooltip(target, item);
+    } else {
+      activeElement = null;
+      hideTooltip();
+    }
+  }
+
   function showTooltip(target, item){
     tooltip.innerHTML = `
       <h3>${item.word} ・ ${item.reading}</h3>
@@ -71,7 +90,7 @@
     `;
     tooltip.classList.add('visible');
     tooltip.setAttribute('aria-hidden', 'false');
-    positionTooltip();
+    positionTooltip(target);
   }
 
   function hideTooltip(){
@@ -79,27 +98,44 @@
     tooltip.setAttribute('aria-hidden', 'true');
   }
 
-  function positionTooltip(ev){
-    const e = ev || window.event;
-    const x = e && e.clientX ? e.clientX : (window.innerWidth / 2);
-    const y = e && e.clientY ? e.clientY : (window.innerHeight / 2);
+  function positionTooltip(target){
+    const rect = target.getBoundingClientRect();
     const padding = 12;
     const width = tooltip.offsetWidth;
     const height = tooltip.offsetHeight;
 
-    let left = x + padding;
-    let top = y + padding;
+    let left = rect.right + padding;
+    let top = rect.top;
 
+    // If tooltip goes off right edge, position to left of card
     if (left + width > window.innerWidth - padding) {
-      left = x - width - padding;
+      left = rect.left - width - padding;
     }
+
+    // If tooltip goes off bottom, adjust up
     if (top + height > window.innerHeight - padding) {
-      top = y - height - padding;
+      top = window.innerHeight - height - padding;
+    }
+
+    // If tooltip goes off left, position to right of card
+    if (left < padding) {
+      left = rect.right + padding;
     }
 
     tooltip.style.left = left + 'px';
     tooltip.style.top = top + 'px';
   }
+
+  // Close tooltip when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.word-item') && !e.target.closest('.tooltip')) {
+      if (activeElement) {
+        activeElement.classList.remove('active');
+        activeElement = null;
+        hideTooltip();
+      }
+    }
+  });
 
   renderWords();
 })();
