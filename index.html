@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Japanese Words Hover Examples</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <h1>Japanese Words</h1>
+    <p>Hover over a word to see its definition and example sentences.</p>
+    <div class="controls">
+      <div class="search-container">
+        <input type="text" id="search-input" class="search-input" placeholder="Search in example sentences...">
+      </div>
+      <div class="toggle-container">
+        <label class="toggle-label">
+          <input type="checkbox" id="onomatope-toggle" class="toggle-checkbox">
+          <span class="toggle-switch"></span>
+          <span class="toggle-text">Onomatope Only</span>
+        </label>
+      </div>
+    </div>
+    <ul id="word-list" class="word-list"></ul>
+  </main>
+
+  <div id="tooltip" class="tooltip" role="dialog" aria-hidden="true"></div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
